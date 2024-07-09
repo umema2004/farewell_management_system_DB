@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SeniorHome</title>
+    <link rel="stylesheet" type="text/css" href="styledb.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!--header-->
+    <section class="headerabout">                                          
+        <nav>
+
+            <div class="links">
+                <ul>
+                    <li><a href="/gotohome">HOME</a></li>
+                    <li><a href="/goToAbout">ABOUT</a></li>
+                    <li><a href="/gotoseniorlogin">SENIOR</a></li>
+                    <li><a href="/gotovolunteerlogin">VOLUNTEER</a></li>
+                    <li><a href="/gototeacherlogin">TEACHER</a></li>
+                    <li><a href="/gotoorglogin" class="visitus">MANAGEMENT</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!--blog page-->
+        <h1>Welcome Senior</h1>                                                       
+    </section>
+
+    
+<section >
+    <div class="blog">
+        <form action="http://localhost:3000/homeSenior" method="POST" class="commentbox">
+            <h1>Announcements</h1>
+            <div id="announcements"></div>
+            <!-- <button type="submit" class="visitus clr" name="cancelButton">BACK TO HOME</button>              -->
+        </form>
+    </div>
+</section>
+
+<section class="blog">
+    <div class="blog">
+        <form action="http://localhost:3000/homeSenior" method="POST" class="commentbox" id="voteForm">
+            <h1>Take Vote</h1>
+            <div class="vote-section">
+                <h2>Vote for Menu Item</h2>
+                <label for="menuItem">Select Menu Item:</label>
+                <select name="menuItem" id="menuItem">
+                    <!-- Options will be dynamically filled from the database -->
+                </select>
+                <!-- <button type="submit" class="visitus clr">Submit Menu Vote</button> -->
+            </div>
+            <br><br>
+            <div>
+                <h2>Vote for Performance</h2>
+                <label for="performanceType">Performance Type:</label>
+                <input type="text" name="performanceType" id="performanceType" required>
+
+                <label for="duration">Duration:</label>
+                <input type="time" name="duration" id="duration" required>
+
+                <label for="specialRequests">Special Requests:</label>
+                <textarea name="specialRequests" id="specialRequests" rows="4" cols="50"></textarea>
+
+                <button type="submit" class="visitus clr">Submit Performance Vote</button>
+            </div>
+        </form>
+    </div>
+</section>
+<div class="blog">
+    <h1>Tasks and Progress</h1>
+    <div class="bar-graph" id="barGraph"></div> 
+    <div class="row" id="taskProgress"></div>
+    
+</div>
+
+
+
+
+<!--footer-->
+<section class="footer">
+    <h4>About Us</h4>
+	<p>Umema Ashar - Tabidah Usmani - Zuanira Ahmed<br>22i2036 - 22i2070 - 22i2075 <br>Database Systems Final Project<br> </p>
+    <div class="icons">
+        <img src="pics/icons1.png">
+        <img src="pics/icons2.png">
+        <img src="pics/icons3.png">
+    </div>
+</section>
+<script>
+    fetch('/homeTeacher')
+        .then(response => response.json())
+        .then(data => {
+            const announcementsDiv = document.getElementById('announcements');
+
+            // Group announcements into sets of three
+            for (let i = 0; i < data.length; i += 3) {
+                const announcementSet = data.slice(i, i + 3); // Get three announcements
+                const div = document.createElement('div');
+                div.className = 'discoverpara';
+
+                // Create announcement elements for each set
+                announcementSet.forEach((announcement, index) => {
+                    const announcementType = announcement.announcement_type;
+                    const details = announcement.details;
+                    const imageURL = `pics/ann${i + index + 1}.jpg`; // Adjusted image URL
+
+                    const announcementElement = document.createElement('div');
+                    announcementElement.className = 'announcement';
+                    announcementElement.innerHTML = `<h2>${announcementType}</h2>
+                                                    <p>${details}</p>
+                                                    <img src="${imageURL}" alt="${announcementType}">`;
+                    div.appendChild(announcementElement);
+                });
+
+                announcementsDiv.appendChild(div);
+            }
+        })
+        .catch(error => console.error('Error fetching announcements:', error));
+
+            // Fetch menu items from the server and populate the select dropdown
+    fetch('/getMenuItems')
+        .then(response => response.json())
+        .then(data => {
+            const selectMenu = document.getElementById('menuItem');
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.text = item.item;
+                option.value = item.menu_id;
+                selectMenu.add(option);
+            });
+        })
+        .catch(error => console.error('Error fetching menu items:', error));
+
+    // Handle form submission
+    document.getElementById('voteForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const menuItemId = document.getElementById('menuItem').value;
+        
+        fetch('/submitVote', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ menuItemId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message); // Display response message
+            // Optionally, you can redirect the user to another page after voting
+            // window.location.href = '/thankyou'; 
+        })
+        .catch(error => console.error('Error submitting vote:', error));
+    });
+
+    fetch('/getTasksAndProgress')
+    .then(response => response.json())
+    .then(data => {
+        const taskProgressDiv = document.getElementById('taskProgress');
+        const barGraphDiv = document.getElementById('barGraph');
+
+        // Display tasks and progress
+        for (let i = 0; i < data.tasks.length; i += 4) {
+            const tasksSubset = data.tasks.slice(i, i + 4);
+
+            // Create a new div for every four tasks
+            const taskDiv = document.createElement('div');
+            taskDiv.className = 'task-group';
+
+            tasksSubset.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task';
+                taskElement.innerHTML = `<h2>Task ID: ${task.task_id}</h2>
+                                          <p>Task Type: ${task.task_type}</p>
+                                          <p>Deadline: ${task.deadline}</p>
+                                          <p>Progress: ${getProgress(task)}</p>`;
+                taskDiv.appendChild(taskElement);
+            });
+
+            taskProgressDiv.appendChild(taskDiv);
+        }
+
+        // Create a bar graph for task progress
+        const notStartedCount = data.progress.filter(progress => progress.not_started).length;
+        const halfwayDoneCount = data.progress.filter(progress => progress.halfway_done).length;
+        const completeCount = data.progress.filter(progress => progress.complete).length;
+
+        const totalTasks = notStartedCount + halfwayDoneCount + completeCount;
+        const notStartedPercentage = (notStartedCount / totalTasks) * 100;
+        const halfwayDonePercentage = (halfwayDoneCount / totalTasks) * 100;
+        const completePercentage = (completeCount / totalTasks) * 100;
+
+        const notStartedBar = document.createElement('div');
+        notStartedBar.className = 'bar';
+        notStartedBar.innerHTML = `<div class="bar-inner" style="width: ${notStartedPercentage}%"></div>
+                                   <div class="bar-text">Not Started</div>`;
+        barGraphDiv.appendChild(notStartedBar);
+
+        const halfwayDoneBar = document.createElement('div');
+        halfwayDoneBar.className = 'bar';
+        halfwayDoneBar.innerHTML = `<div class="bar-inner" style="width: ${halfwayDonePercentage}%"></div>
+                                     <div class="bar-text">Halfway Done</div>`;
+        barGraphDiv.appendChild(halfwayDoneBar);
+
+        const completeBar = document.createElement('div');
+        completeBar.className = 'bar';
+        completeBar.innerHTML = `<div class="bar-inner" style="width: ${completePercentage}%"></div>
+                                  <div class="bar-text">Complete</div>`;
+        barGraphDiv.appendChild(completeBar);
+    })
+    .catch(error => console.error('Error fetching tasks and progress:', error));
+
+
+    // Function to determine the progress of a task
+    function getProgress(task) {
+        if (task.progress === 'complete') {
+            return 'Complete';
+        } else if (task.progress === 'halfway_done') {
+            return 'Halfway Done';
+        } else {
+            return 'Not Started';
+        }
+    }
+</script>
+</body>
+</html>

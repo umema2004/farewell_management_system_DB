@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OrgHome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styledb.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!--header-->
+    <section class="headerabout">                                          
+        <nav>
+            <div class="links">
+                <ul>
+                    <li><a href="/gotohome">HOME</a></li>
+                    <li><a href="/goToAbout">ABOUT</a></li>
+                    <li><a href="/gotoseniorlogin">SENIOR</a></li>
+                    <li><a href="/gotovolunteerlogin">VOLUNTEER</a></li>
+                    <li><a href="/gototeacherlogin">TEACHER</a></li>
+                    <li><a href="/gotoorglogin" class="visitus">MANAGEMENT</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!--blog page-->
+        <h1>Welcome Management Member</h1>                                                       
+    </section>
+
+    
+    <section class="vote-section blog">
+        <form id="teamForm" action="/team_selection" method="post">
+            <label for="team">Select a team:</label>
+            <select id="team" name="team">
+                <option value="1">DINNER MENU TEAM</option>
+                <option value="2">PERFORMANCE TEAM</option>
+                <option value="3">BUDGET TEAM</option>
+                <option value="4">INVITATIONS TEAM</option>
+            </select>
+    
+            <div id="newItem" style="display: none;">
+                <label for="newItemName">Item:</label>
+                <input type="text" id="newItemName" name="newItemName">
+                <label for="newItemCost">Cost:</label>
+                <input type="number" id="newItemCost" name="newItemCost" step="0.01">
+                <button type="button" id="addItemBtn" class="visitus clr">Add Item</button>
+            </div>
+    
+            <input type="submit" value="Submit" class="visitus clr">
+        </form>
+        <div id="error-message" style="display: none;"></div>
+        <div id="team_info">
+            <!-- Display team information here -->
+            <canvas id="budgetChart" width="400" height="400"></canvas>
+        </div>
+    </section>
+
+    <!--footer-->
+    <section class="footer">
+        <h4>About Us</h4>
+        <p>Umema Ashar - Tabidah Usmani - Zuanira Ahmed<br>22i2036 - 22i2070 - 22i2075 <br>Database Systems Final Project<br> </p>
+        <div class="icons">
+            <a href="#"><img src="pics/icons1.png" alt="Icon 1"></a>
+            <a href="#"><img src="pics/icons2.png" alt="Icon 2"></a>
+            <a href="#"><img src="pics/icons3.png" alt="Icon 3"></a>
+        </div>
+    </section>
+
+    <script>
+        // JavaScript code
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('team').addEventListener('change', function() {
+                var teamId = this.value;
+                var newItemDiv = document.getElementById('newItem');
+                if (teamId === '3') {
+                    newItemDiv.style.display = 'block';
+                } else {
+                    newItemDiv.style.display = 'none';
+                }
+            });
+            document.getElementById('team').addEventListener('change', function() {
+        var teamId = this.value;
+        var newItemDiv = document.getElementById('newItem');
+        if (teamId === '1') {
+            newItemDiv.style.display = 'block';
+        } else {
+            newItemDiv.style.display = 'none';
+        }
+    });
+            document.querySelector('form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const teamId = formData.get('team');
+                const response = await fetch('/team_selection', {
+                    method: 'POST',
+                    body: new URLSearchParams({ team: teamId }),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                const data = await response.json();
+                const teamInfoDiv = document.getElementById('team_info');
+                teamInfoDiv.innerHTML = '<h2>Team Information:</h2>';
+                const ul = document.createElement('ul');
+                if (teamId === '1') {
+        let totalCost = 0; // Initialize total cost
+        data.menu.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = `${item.item}: $${item.cost}`;
+            totalCost += parseFloat(item.cost); // Add item cost to totalCost
+            ul.appendChild(li);
+        });
+
+        // Display total cost
+        const totalLi = document.createElement('li');
+        totalLi.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+        ul.appendChild(totalLi);
+
+        // Display form for adding new item
+        const newItemDiv = document.getElementById('newItem');
+        newItemDiv.style.display = 'block';
+
+        // Add event listener to add new item button
+        const addItemBtn = document.getElementById('addItemBtn');
+        addItemBtn.addEventListener('click', async () => {
+            const newItemName = document.getElementById('newItemName').value;
+            const newItemCost = document.getElementById('newItemCost').value;
+
+            // Send data to server
+            const response = await fetch('/add_menu_item', {
+                method: 'POST',
+                body: new URLSearchParams({ team: teamId, item: newItemName, cost: newItemCost }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            const newData = await response.json();
+
+            if (response.ok) {
+                // Update total cost
+                totalCost += parseFloat(newItemCost);
+                totalLi.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+
+                // Display the newly added item
+                const li = document.createElement('li');
+                li.textContent = `${newItemName}: $${newItemCost}`;
+                ul.appendChild(li);
+            } else {
+                // Display error message
+                const errorMessageDiv = document.getElementById('error-message');
+                errorMessageDiv.textContent = newData.error;
+                errorMessageDiv.style.display = 'block';
+            }
+        });
+    } else if (teamId === '2') {
+        data.performanceInfo.forEach(info => {
+            const li = document.createElement('li');
+            li.textContent = `Title: ${info.performance_title}, Acceptance: ${info.acceptance ? 'Accepted' : 'Not Accepted'}, Time Slots: ${info.time_slots}, Venue: ${info.venue}, Rehearsals: ${info.rehearsals}`;
+            ul.appendChild(li);
+        });
+                } else if (teamId === '3') {
+                    // Handle budget team
+                    const budgetInfo = document.createElement('div');
+                    budgetInfo.innerHTML = '<h3>Budget Information:</h3>';
+                    const canvas = document.createElement('canvas');
+                    canvas.id = 'budgetChart';
+                    budgetInfo.appendChild(canvas);
+                    teamInfoDiv.appendChild(budgetInfo);
+
+                    const labels = Object.keys(data.budgets);
+                    const values = Object.values(data.budgets);
+
+                    new Chart(canvas, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Budget',
+                                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)'],
+                                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'],
+                                borderWidth: 1,
+                                data: values,
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                } else if (teamId === '4') {
+                    const imagesDiv = document.createElement('div');
+        imagesDiv.classList.add('invitation-images');
+        data.invitationsImages.forEach(image => {
+            const img = document.createElement('img');
+            img.src = image;
+            imagesDiv.appendChild(img);
+        });
+        teamInfoDiv.appendChild(imagesDiv);
+        return;
+                }
+                teamInfoDiv.appendChild(ul);
+            });
+        });
+    </script>    
+    
+</body>
+</html>

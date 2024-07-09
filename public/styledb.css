@@ -1,0 +1,463 @@
+*{
+	margin: 0;
+	padding: 0;
+	font-family: 'PT Serif', serif;
+}
+
+
+.header{
+	height: 100vh;
+	width: 100%;
+	background-image: linear-gradient(rgba(4,9,30,0.4),rgba(4,9,30,0.4)),url(pics/bg.jpg);
+	background-position: center;
+	background-size: cover;
+	position: relative;
+}
+
+nav{
+	display: flex;
+	padding: 2% 6%;
+	justify-content: space-between ;
+	align-items: center;
+}
+
+nav img{
+	width: 150px;
+}
+
+.links{
+	flex: 1;
+	text-align: right;
+}
+
+.links ul li{
+	list-style: none;
+	display: inline-block;
+	padding: 8px 12px;
+	position: relative;
+}
+.links ul li a{
+	color: white;
+	text-decoration: none;
+	font-size: 13px;
+}
+.links ul li::after{
+	content: '';
+	width: 0%;
+	height: 2px;
+	background: #f44336;
+	display: block;
+	margin: auto;
+	transition: 0.5s;
+}
+.links ul li:hover::after{
+	width: 100%;
+}
+
+.text{
+	width: 90%;
+	color: white;
+	position: absolute;
+	left: 5%;
+	top: 40%;
+	text-align: center;
+}
+.text h1{
+	font-size: 85px;
+}
+.text p{
+	margin: 10px 0 40px;
+	font-size: 14px;
+	color: white;
+}
+
+.visitus{
+	display: inline-block;
+	text-decoration: none;
+	color: white;
+	border: 1px solid white;
+	padding: 12px 34px;
+	font-size: 13px;
+	background: transparent;
+	position: relative;
+	cursor: pointer;
+}
+.visitus:hover{
+	border: 1px solid cadetblue;
+	background: cadetblue;
+	transition: 1s;
+}
+
+/*--DESTINATIONS--*/
+.DESTINATIONS{
+	width: 80%;
+	margin: auto;
+	text-align: center;
+	padding-top: 100px;
+}
+
+h1{
+	font-size: 36px;
+	font-weight: 600;
+}
+
+p{
+	color: grey;
+	font-size: 145;
+	font-weight: 300;
+	line-height: 22px;
+	padding: 10px;
+}
+
+.row{
+	margin-top: 5%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.para{
+	flex-basis: 30%;
+	background: whitesmoke;
+	border-radius: 10px;
+	margin-bottom: 5%;
+	padding: 20px 12px;
+	box-sizing: border-box;
+	transition: 0.5s;
+}
+
+h3{
+	text-align: center ;
+	font-weight: 600;
+	margin: 10px 0;
+}
+
+.para:hover{
+	box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.blog{
+	
+	width: 80%;
+	margin: auto;
+	text-align: center;
+	padding-top: 100px;
+}
+
+
+.para{
+	flex-basis: 32%;
+	border-radius: 10px;
+	margin-bottom: 30px;
+	position: relative;
+	overflow: hidden;
+}
+.para img{
+	width: 100%;
+	display: block;
+}
+
+.layer{
+	background: transparent;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: 0.5s;
+}
+
+.layer:hover{
+	background: rgba(0,0,0,0.7);
+}
+.layer h3{
+	width: 100%;
+	font-weight: 500;
+	color: white;
+	font-size: 26px;
+	bottom: 0;
+	left: 50%;
+	transform: translate(-50%);
+	position: absolute;
+	opacity: 0;
+	transition: 0.5s;
+}
+
+.layer:hover h3{
+	bottom: 49%;
+	opacity: 1;
+}
+
+.discover{
+	width: 80%;
+	margin: auto;
+	text-align: center;
+	padding-top: 100px;
+}
+
+.discoverpara{
+	flex-basis: 30%;
+	border-radius: 10px;
+	margin-bottom: 5%;
+	text-align: left;
+}
+.discoverpara img{
+	width: 50%;
+	border-radius: 10px;
+}
+
+.discoverpara p{
+	padding: 0;
+}
+
+.discoverpara h3{
+	margin-top: 16px;
+	margin-bottom: 15px;
+	text-align: left;
+}
+
+.trend{
+	width: 80%;
+	margin: auto;
+	text-align: center;
+	padding-top: 100px;
+}
+
+.booknow{
+	margin: 100px auto;
+	width: 80%;
+	background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),url(pics/booknow.jpg) ;
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+    text-align: center;
+    padding: 100px 0;
+}
+.booknow h1{
+	color: white;
+	margin-bottom: 40px;
+	padding: 0;
+}
+
+.footer{
+	width: 100%;
+	text-align: center;
+	padding: 30px 0;
+}
+.footer h4{
+	margin-bottom: 25px;
+	margin-top: 25px;
+	font-weight: 600;
+}
+
+.icons img{
+	width: 30px;
+	height: 30px;
+	align-items: center;
+	margin: 10px;
+	cursor: pointer;
+}
+
+/*--ABOUT PAGE--*/
+
+.headerabout{
+	height: 50vh;
+	width: 100%;
+	background-image: linear-gradient(rgba(4, 9, 30, 0.7),rgba(4, 9, 30, 0.7)),url(pics/bd_about.jpg);
+	background-position: center;
+	background-size: cover ;
+	text-align: center;
+	color: white;
+}
+
+.about{
+	width: 80%;
+	margin: auto;
+	padding-top: 80px;
+	padding-bottom: 50px;
+}
+
+.aboutpara{
+	flex-basis: 48%;
+	padding: 30px 2px;
+}
+
+.aboutpara img{
+	width: 100%;
+}
+.aboutpara h1{
+	padding-top: 0;
+}
+.aboutpara p{
+	padding: 15px 0 25px;
+}
+
+.clr{
+	border: 1px solid cadetblue;
+	background: transparent;
+	color: cadetblue;
+}
+.clr:hover{
+	color: white;
+}
+
+.travelblog{
+
+	width: 80%;
+	margin: auto;
+	padding: 60px 0;
+}
+
+
+.blogpost{
+	flex-basis: 65%;
+}
+.blogpost img{
+	width: 100%;
+}
+.blogpost h2{
+	color: black;
+	font-weight: 600;
+	margin: 30px 0;
+}
+.blogpost p{
+	color: #999;
+	padding: 0;
+}
+
+.destinationsblog{
+	flex-basis: 32%;
+}
+.destinationsblog h3{
+	background: cadetblue;
+	color: white;
+	padding: 7px 0;
+	font-size: 16px;
+	margin-bottom: 20px;
+}
+.destinationsblog div{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: grey;
+	padding: 8px;
+	box-sizing: border-box;
+}
+
+.comment{
+	border-radius: 1px solid #ccc;
+	margin: 50px 0;
+	padding: 10px 20px;
+}
+.comment h3{
+	text-align: left;
+}
+
+.commentbox input, .commentbox textarea{
+	width: 100%;
+	padding: 10px;
+	margin: 15px 0;
+	box-sizing: border-box;
+	border: none;
+	outline: none;
+	background: whitesmoke;
+}
+
+.login{
+	width: 80%;
+	margin: auto;
+	text-align: center;
+	padding-top: 100px;
+}
+
+.signup{
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.7);
+	position: absolute;
+	top: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+.signup_para{
+	width: 500px;
+	height: 410px;
+	background-color: white;
+	border-radius: 4px;
+	text-align: center;
+	padding: 20px;
+	position: relative;
+}
+
+/* Styles for the task progress bar graph */
+#barGraph {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bar {
+    flex: 1;
+    height: 30px;
+    position: relative;
+    border: 1px solid #ccc;
+    margin: 0 10px;
+}
+
+.bar-inner {
+    height: 100%;
+    background-color: #3498db; /* Change the color as needed */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.bar-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #000000; /* Text color */
+    font-size: 14px; /* Adjust font size as needed */
+}
+/* Styles for the "Vote for Menu Item" section */
+.vote-section {
+    margin-top: 20px;
+}
+
+.vote-section h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.vote-section label {
+    font-size: 16px;
+    color: #555;
+    margin-right: 10px;
+}
+
+.vote-section select {
+    width: 200px; 
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.invitation-images {
+	flex-basis: 30%;
+	border-radius: 10px;
+	margin-bottom: 5%;
+	text-align: left;
+	margin-bottom: 40px;
+}
+
+.invitation-images img {
+	width: 80%;
+	border-radius: 10px;
+	align-items: center;
+}

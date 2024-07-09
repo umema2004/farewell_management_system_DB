@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VolunteerHome</title>
+    <link rel="stylesheet" type="text/css" href="styledb.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!--header-->
+    <section class="headerabout">                                          
+        <nav>
+            <div class="links">
+                <ul>
+                    <li><a href="/gotohome">HOME</a></li>
+                    <li><a href="/goToAbout">ABOUT</a></li>
+                    <li><a href="/gotoseniorlogin">SENIOR</a></li>
+                    <li><a href="/gotovolunteerlogin">VOLUNTEER</a></li>
+                    <li><a href="/gototeacherlogin">TEACHER</a></li>
+                    <li><a href="/gotoorglogin" class="visitus">MANAGEMENT</a></li>
+                </ul>
+            </div>
+        </nav>
+        <h1>Welcome Volunteer</h1>  
+    </section>
+
+    <div class="blog">
+        <h1>Tasks and Progress</h1>
+        <div class="bar-graph" id="barGraph"></div> 
+        <div class="row" id="taskProgress"></div>
+    </div>
+
+    <!--footer-->
+    <section class="footer">
+        <h4>About Us</h4>
+        <p>Umema Ashar - Tabidah Usmani - Zuanira Ahmed<br>22i2036 - 22i2070 - 22i2075 <br>Database Systems Final Project<br> </p>
+        <div class="icons">
+            <img src="pics/icons1.png">
+            <img src="pics/icons2.png">
+            <img src="pics/icons3.png">
+        </div>
+    </section>
+
+<script>
+    fetch('/getTasksAndProgress')
+    .then(response => response.json())
+    .then(data => {
+        const taskProgressDiv = document.getElementById('taskProgress');
+        const barGraphDiv = document.getElementById('barGraph');
+
+        // Display tasks and progress
+        for (let i = 0; i < data.tasks.length; i += 4) {
+            const tasksSubset = data.tasks.slice(i, i + 4);
+
+            // Create a new div for every four tasks
+            const taskDiv = document.createElement('div');
+            taskDiv.className = 'task-group';
+
+            tasksSubset.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task';
+                taskElement.innerHTML = `<h2>Task ID: ${task.task_id}</h2>
+                                          <p>Task Type: ${task.task_type}</p>
+                                          <p>Deadline: ${task.deadline}</p>
+                                          <p>Progress: ${getProgress(task)}</p>`;
+                taskDiv.appendChild(taskElement);
+            });
+
+            taskProgressDiv.appendChild(taskDiv);
+        }
+
+        // Create a bar graph for task progress
+        const notStartedCount = data.progress.filter(progress => progress.not_started).length;
+        const halfwayDoneCount = data.progress.filter(progress => progress.halfway_done).length;
+        const completeCount = data.progress.filter(progress => progress.complete).length;
+
+        const totalTasks = notStartedCount + halfwayDoneCount + completeCount;
+        const notStartedPercentage = (notStartedCount / totalTasks) * 100;
+        const halfwayDonePercentage = (halfwayDoneCount / totalTasks) * 100;
+        const completePercentage = (completeCount / totalTasks) * 100;
+
+        const notStartedBar = document.createElement('div');
+        notStartedBar.className = 'bar';
+        notStartedBar.innerHTML = `<div class="bar-inner" style="width: ${notStartedPercentage}%"></div>
+                                   <div class="bar-text">Not Started</div>`;
+        barGraphDiv.appendChild(notStartedBar);
+
+        const halfwayDoneBar = document.createElement('div');
+        halfwayDoneBar.className = 'bar';
+        halfwayDoneBar.innerHTML = `<div class="bar-inner" style="width: ${halfwayDonePercentage}%"></div>
+                                     <div class="bar-text">Halfway Done</div>`;
+        barGraphDiv.appendChild(halfwayDoneBar);
+
+        const completeBar = document.createElement('div');
+        completeBar.className = 'bar';
+        completeBar.innerHTML = `<div class="bar-inner" style="width: ${completePercentage}%"></div>
+                                  <div class="bar-text">Complete</div>`;
+        barGraphDiv.appendChild(completeBar);
+    })
+    .catch(error => console.error('Error fetching tasks and progress:', error));
+
+
+    // Function to determine the progress of a task
+    function getProgress(task) {
+        if (task.progress === 'complete') {
+            return 'Complete';
+        } else if (task.progress === 'halfway_done') {
+            return 'Halfway Done';
+        } else {
+            return 'Not Started';
+        }
+    }
+</script>
+</body>
+</html>

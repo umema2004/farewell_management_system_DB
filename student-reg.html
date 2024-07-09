@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StdudentReg</title>
+    <link rel="stylesheet" type="text/css" href="styledb.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!--header-->
+    <section class="headerabout">                                          <!--same sub-header for every page-->
+        <nav>
+            <div class="links">
+                <ul>
+					<li><a href="/gotohome">HOME</a></li>
+					<li><a href="/goToAbout">ABOUT</a></li>
+					<li><a href="/gotoseniorlogin">SENIOR</a></li>
+					<li><a href="/gotovolunteerlogin">VOLUNTEER</a></li>
+					<li><a href="/gototeacherlogin">TEACHER</a></li>
+					<li><a href="/gotoorglogin" class="visitus">MANAGEMENT</a></li>
+				</ul>
+            </div>
+        </nav>
+
+        <!--blog page-->
+        <h1>Register as a Student</h1>                                                        <!--blog page title-->
+    </section>
+
+
+    
+<section class="blog">
+    <h1>Create new Account</h1>
+    <p>Fill in the information below to create a new account.</p>
+    <div class="blog">
+        <form action="http://localhost:3000/registerStudent" method="POST" class="commentbox">                 <!--registration form- request info-->
+            <input type="text" placeholder="Enter Full Name" name="fullName">
+            <input type="text" placeholder="Enter Contact No" name="contactNo">
+            <input type="text" placeholder="Enter Roll Number" name="rollNumber">
+            <input type="text" placeholder="Enter username" name="username">
+            <input type="password" placeholder="Password" name="password">
+			<br><br><br>
+            <!-- Select Senior or Volunteer -->
+            <label for="userType">Select User Type:</label>
+            <select id="userType" name="userType">
+                <option value="senior">Senior</option>
+                <option value="volunteer">Volunteer</option>
+            </select>
+
+            <!-- Additional fields for seniors -->
+            <div id="seniorFields" style="display: none;">
+                <h2>Senior Details</h2>
+                
+                <input type="text" placeholder="Enter Batch" name="batch">
+                <input type="text" placeholder="Enter Department" name="department">
+                
+                <!-- Additional family members -->
+                <div id="familyMembers">
+                    <h3>Additional Family Members</h3>
+                    <label for="numMembers">Number of Members:</label>
+                    <input type="number" id="numMembers" name="numMembers" min="0">
+                </div>
+                
+                
+				<div id="memberDetails"></div>
+
+                <input type="text" placeholder="Dietary Restrictions (if any)" name="dietaryRestrictions">
+                <input type="text" placeholder="Special Request type:" name="req_type">
+                <textarea placeholder="Special Requests" name="specialRequests"></textarea>
+            </div>
+
+            <!-- Additional fields for volunteers -->
+            <div id="volunteerFields" style="display: none;">
+                <h2>Volunteer Details</h2>
+                <input type="text" placeholder="Enter Batch" name="batch">
+            </div>
+
+            <button type="submit" class="visitus clr">REGISTER</button>
+             <!--registration button-goes to homepage-->
+        </form>
+    </div>
+</section>
+
+<!--footer-->
+<section class="footer">
+    <h4>About Us</h4>
+	<p>Umema Ashar - Tabidah Usmani - Zuanira Ahmed<br>22i2036 - 22i2070 - 22i2075 <br>Database Systems Final Project<br> </p>
+    <div class="icons">
+        <img src="pics/icons1.png">
+        <img src="pics/icons2.png">
+        <img src="pics/icons3.png">
+    </div>
+</section>
+
+<script>
+    document.getElementById('userType').addEventListener('change', function() {
+        var userType = this.value;
+        var seniorFields = document.getElementById('seniorFields');
+        var volunteerFields = document.getElementById('volunteerFields');
+
+        if (userType === 'senior') {
+            seniorFields.style.display = 'block';
+            volunteerFields.style.display = 'none';
+        } else if (userType === 'volunteer') {
+            seniorFields.style.display = 'none';
+            volunteerFields.style.display = 'block';
+        }
+    });
+
+    document.getElementById('numMembers').addEventListener('input', function() {
+        var numMembers = parseInt(this.value);
+        var memberDetailsContainer = document.getElementById('memberDetails');
+        memberDetailsContainer.innerHTML = '';
+
+        for (var i = 1; i <= numMembers; i++) {
+            var memberDiv = document.createElement('div');
+            memberDiv.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h3>Family Member ${i}</h3>
+                    <input type="text" placeholder="Enter Name" name="memberName${i}">
+                    <input type="text" placeholder="Enter Contact No" name="memberContact${i}">
+                </div>
+            `;
+            memberDetailsContainer.appendChild(memberDiv);
+        }
+    });
+</script>
+
+</body>
+</html>
